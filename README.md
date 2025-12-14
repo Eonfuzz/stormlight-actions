@@ -1,94 +1,97 @@
-# Obsidian Sample Plugin
+---
+plugin: Stormlight Action Icons
+type: documentation
+tags:
+  - obsidian/plugin
+  - markdown
+  - codemirror
+---
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+# Stormlight Action Icons (Obsidian Plugin)
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+This plugin turns **inline code tokens** like `` `strm: r` `` into a styled **inline “action icon” widget** in both:
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+- **Reading mode** (rendered Markdown)
+- **Live Preview** (CodeMirror editor)
 
-## First time developing plugins?
+It’s designed so you can type simple, searchable text tokens, while your notes display compact action glyphs via CSS.
 
-Quick starting guide for new plugin devs:
+> [!credit]
+> **Heavy inspiration / base code credit:** https://github.com/thiagocoutinhor/pf2-action-icons
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
-
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+---
 
 ## How to use
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+Write one of the supported tokens inside **inline code** (single backticks):
 
-## Manually installing the plugin
+- `` `strm: r` ``
+- `` `strm: 1` ``
+- `` `strm: u` ``
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+That’s it — the plugin replaces the inline code with a `<span>` in preview.
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+> [!important]
+> It only matches when the inline code content is *just* the token (with optional whitespace).  
+> Example ✅ `` `strm: r` ``  
+> Example ❌ `` `do strm: r now` ``
 
-## Funding URL
+---
 
-You can include funding URLs where people who use your plugin can financially support it.
+## Trigger format
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+All replacements are anchored to this pattern (case-insensitive): `strm: <token>`
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+
+- Trigger word is **fixed**: `strm`
+- Whitespace is flexible: `strm: r`, ` strm :   r ` etc.
+
+---
+
+## Supported actions
+
+The plugin has two concepts per action:
+
+1) **Input token** (what you type after `strm:`) — configurable via settings  
+2) **Rendered text** (what the widget displays) — fixed in code (`ACTION_STRINGS`)
+
+### Default inputs → rendered output
+
+| Action | Default input you type | Rendered output | CSS modifier class |
+|---|---:|---:|---|
+| Reaction | `r` | `r` | `.strm-widget-r` |
+| Opportunity | `o` | `o` | `.strm-widget-o` |
+| Complication | `c` | `c` | `.strm-widget-c` |
+| 1 action | `1` | `1` | `.strm-widget-1` |
+| 2 actions | `2` | `2` | `.strm-widget-2` |
+| 3 actions | `3` | `3` | `.strm-widget-3` |
+| Free | `f` | `0` | `.strm-widget-u` *(see note)* |
+| Unlimited | `u` | `8` | `.strm-widget-u` |
+
+> [!note] Free action CSS class
+> In the current code, **Free** renders `0` but uses the **unlimited** CSS modifier class: `.strm-widget-u`.  
+> This is because the “command” for Free is set to `DEFAULT_SETTINGS.unlimited`.
+
+### “Star”
+`ACTION_STRINGS` includes `star: "s"` but there is **no replacement rule wired up** for it yet, so `` `strm: s` `` won’t render unless you add a corresponding replacement.
+
+---
+
+## Settings (what’s configurable)
+
+The plugin loads settings from Obsidian’s stored plugin data and merges with defaults:
+
+```ts
+reaction: "r"
+opportunity: "o"
+complication: "c"
+unlimited: "u"
+one: "1"
+two: "2"
+three: "3"
+free: "f"
 ```
 
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
+## Credits
+[!credit]
+Heavy inspiration / base code credit: https://github.com/thiagocoutinhor/pf2-action-icons
