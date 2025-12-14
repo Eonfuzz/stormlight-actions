@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownPostProcessorContext, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { MarkdownPostProcessorContext, Plugin } from 'obsidian';
 import { Extension } from '@codemirror/state';
 import { TRIGGER_WORD } from './plugin.const';
 import { ActionMarkdownRenderChild } from './render-child';
@@ -66,9 +66,6 @@ export default class StormlightIcons extends Plugin {
 		// Register the live preview plugin
 		this.registerEditorExtension(this.editorExtensions)
 		this.updateExtensions()
-
-		// Everything ready
-		console.log('Stormlight Actions Actions loaded')
 	}
 
 
@@ -88,7 +85,7 @@ export default class StormlightIcons extends Plugin {
 	}
 
 
-	async markdownPostProcessor(element: HTMLElement, context: MarkdownPostProcessorContext): Promise<any> {
+	markdownPostProcessor(element: HTMLElement, context: MarkdownPostProcessorContext): void {
 		let codes = element.querySelectorAll('code');
 
 		// No code found
