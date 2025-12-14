@@ -17,9 +17,6 @@ This plugin turns **inline code tokens** like `` `strm: r` `` into a styled **in
 It’s designed so you can type simple, searchable text tokens, while your notes display compact action glyphs via CSS. 
 <img width="569" height="257" alt="image" src="https://github.com/user-attachments/assets/eb8cc0d8-f428-4e57-aa00-9f215ced9bbe" />
 
-> [!credit]
-> **Heavy inspiration / base code credit:** https://github.com/thiagocoutinhor/pf2-action-icons
-
 ---
 
 ## How to use
@@ -51,5 +48,5 @@ All replacements are anchored to this pattern (case-insensitive): `strm: <token>
 ---
 
 ## Credits
-[!credit]
+
 Heavy inspiration / base code credit: https://github.com/thiagocoutinhor/pf2-action-icons
