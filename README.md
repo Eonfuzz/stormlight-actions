@@ -34,16 +34,16 @@ And that's it!
 
 All replacements are anchored to this pattern (case-insensitive): `strm: <token>`
 
-| Action | Default input you type | Rendered output | CSS modifier class |
+| Action | Term | 
 |---|---|
-| Reaction | `r` |
-| Opportunity | `o` |
-| Complication | `c` |
-| 1 action | `1` |
-| 2 actions | `2` |
-| 3 actions | `3` |
-| Free | `f` | `0` |
-| Unlimited | `u` |
+| Reaction | `strm:r` |
+| Opportunity | `strm:o` |
+| Complication | `strm:c` |
+| 1 action | `strm:1` |
+| 2 actions | `strm:2` |
+| 3 actions | `strm:3` |
+| Free | `strm:f` |
+| Unlimited | `strm:u` |
 
 ---
 
