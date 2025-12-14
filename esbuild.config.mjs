@@ -10,12 +10,15 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 const prod = (process.argv[2] === "production");
+const dir = prod ? './' : './stormlight-actions-dist';
+console.log("Building output to ", dir);
 
 const context = await esbuild.context({
 	banner: {
 		js: banner,
 	},
-	entryPoints: ["main.ts"],
+	entryPoints: ["src/main.ts", "src/styles.css"],
+	loader: { ".ttf": "base64", ".woff": "base64" },
 	bundle: true,
 	external: [
 		"obsidian",
@@ -35,9 +38,10 @@ const context = await esbuild.context({
 	format: "cjs",
 	target: "es2018",
 	logLevel: "info",
+	minify: true,
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outfile: "main.js",
+	outdir: dir, 
 	minify: prod,
 });
 
