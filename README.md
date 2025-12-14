@@ -35,7 +35,7 @@ And that's it!
 All replacements are anchored to this pattern (case-insensitive): `strm: <token>`
 
 | Action | Default input you type | Rendered output | CSS modifier class |
-|---|---:|
+|---|---|
 | Reaction | `r` |
 | Opportunity | `o` |
 | Complication | `c` |
