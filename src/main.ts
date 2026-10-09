@@ -1,5 +1,5 @@
 import { MarkdownPostProcessorContext, Plugin } from 'obsidian';
-import { Extension } from '@codemirror/state';
+import { Extension, Prec } from '@codemirror/state';
 import { TRIGGER_WORD } from './plugin.const';
 import { ActionMarkdownRenderChild } from './render-child';
 import { StormActionsLivePlugin } from './live-preview';
@@ -75,7 +75,8 @@ export default class StormlightIcons extends Plugin {
 
 	updateExtensions() {
 		this.editorExtensions.length = 0
-		this.editorExtensions.push(StormActionsLivePlugin(this))
+		// Keep icon widgets above Obsidian's inline-code replacements.
+		this.editorExtensions.push(Prec.highest(StormActionsLivePlugin(this)))
 		this.app.workspace.updateOptions()
 	}
 
@@ -86,7 +87,7 @@ export default class StormlightIcons extends Plugin {
 
 
 	markdownPostProcessor(element: HTMLElement, context: MarkdownPostProcessorContext): void {
-		let codes = element.querySelectorAll('code');
+		const codes = element.querySelectorAll('code');
 
 		// No code found
 		if (!codes.length) {
