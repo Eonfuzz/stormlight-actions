@@ -1,10 +1,10 @@
 {
 	"id": "stormlight-icons",
 	"name": "Stormlight RPG Icons",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Displays Stormlight RPG Icons.",
 	"author": "Eonfuzz",
-	"authorUrl": "https://github.com/Eonfuzz/", 
+	"authorUrl": "https://github.com/Eonfuzz/",
 	"isDesktopOnly": false
 }
